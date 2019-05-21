@@ -57,7 +57,7 @@ class ENorm:
                 param = param.view(param.size(0), -1).t()
             else:
                 # C_in x (k x k x C_out)
-                param = param.permute(1, 2, 3, 0).contiguous().view(param.size(1), -1)
+                param = param.permute(1, 2, 0).contiguous().view(param.size(1), -1)
         return param
 
     def step(self):
@@ -103,6 +103,6 @@ class ENorm:
 
             if self.momentum:
                 self.optimizer.state[self.weights[i - 1][1]]['momentum_buffer'].mul_(
-                    1 / balancer.unsqueeze(1).unsqueeze(2).unsqueeze(3))
+                    1 / balancer.unsqueeze(1).unsqueeze(2))
                 self.optimizer.state[self.weights[i][1]]['momentum_buffer'].mul_(
-                    balancer.unsqueeze(1).unsqueeze(2).unsqueeze(0))
+                    balancer.unsqueeze(1).unsqueeze(0))
